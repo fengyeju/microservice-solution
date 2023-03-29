@@ -1,0 +1,48 @@
+version: '3.7'
+
+services:
+  rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:management-alpine
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+    networks:
+      - myprojectname-network
+      
+  redis:
+    container_name: redis
+    image: redis:alpine
+    volumes:
+      - redis_config:/usr/local/etc/redis/data
+      - redis_data:/data
+    networks:
+      - myprojectname-network
+
+  postgres-db:
+    container_name: postgres-db
+    image: postgres:latest
+    volumes:
+      - postgres_config:/var/opt/postgres
+      - postgres_data:/var/lib/postgresql/data
+    networks: 
+      - myprojectname-network
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:latest    
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+    networks: 
+      - myprojectname-network
+
+volumes:
+  rabbitmq_data:
+  redis_data:
+  redis_config:
+  postgres_data:
+  postgres_config:
+  pgadmin_data:
+
+networks:
+  myprojectname-network:
+    external: true

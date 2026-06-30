@@ -42,7 +42,9 @@ public class MyProjectNameSharedHostingMicroservicesModule : AbpModule
             options.KeyPrefix = "MyProjectName:";
         });
 
-        var redis = ConnectionMultiplexer.Connect(configuration["Redis:Configuration"]);
+        var redisConfiguration = configuration["Redis:Configuration"]
+            ?? throw new InvalidOperationException("Redis:Configuration is not configured.");
+        var redis = ConnectionMultiplexer.Connect(redisConfiguration);
 
         context.Services
             .AddDataProtection()

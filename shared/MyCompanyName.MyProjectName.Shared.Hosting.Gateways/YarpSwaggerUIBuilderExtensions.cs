@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -21,7 +22,7 @@ public static class YarpSwaggerUIBuilderExtensions
             var yarpConfig = proxyConfigProvider.GetConfig();
 
             var routedClusters = yarpConfig.Clusters
-                .SelectMany(t => t.Destinations,
+                .SelectMany(t => t.Destinations ?? new Dictionary<string, DestinationConfig>(),
                     (clusterId, destination) => new { clusterId.ClusterId, destination.Value });
 
             var groupedClusters = routedClusters
@@ -34,7 +35,7 @@ public static class YarpSwaggerUIBuilderExtensions
             {
                 var routeConfig = yarpConfig.Routes.FirstOrDefault(q =>
                     q.ClusterId == clusterGroup.ClusterId);
-                if (routeConfig == null)
+                if (routeConfig?.RouteId is null)
                 {
                     logger.LogWarning($"Swagger UI: Couldn't find route configuration for {clusterGroup.ClusterId}...");
                     continue;

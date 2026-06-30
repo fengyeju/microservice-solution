@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi;
 using Volo.Abp.Modularity;
 
 namespace MyCompanyName.MyProjectName.Shared.Hosting.AspNetCore;
